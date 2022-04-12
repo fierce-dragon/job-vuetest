@@ -8,6 +8,9 @@
     "preview": "vite preview",
     "lint": "vue-tsc --noEmit && eslint --ext .ts,.js,vue --ignore-path .gitignore ."
   },
+	"engines": {
+    "node": "14.17.4"
+  },
   "dependencies": {
     "axios": "^0.26.1",
     "vue": "^3.2.25",
