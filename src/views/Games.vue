@@ -101,7 +101,7 @@ const error = ref('')
 onMounted(async () => {
   loading.value = true
   games.value = await axios
-    .get<Game[]>('//public.connectnow.org.uk/applicant-test/')
+    .get<Game[]>('http://public.connectnow.org.uk/applicant-test/')
     .then((res) => res.data)
     .catch((err) => (error.value = err.message))
     .finally(() => (loading.value = false))
