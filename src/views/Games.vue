@@ -101,12 +101,7 @@ const error = ref('')
 onMounted(async () => {
   loading.value = true
   games.value = await axios
-    .get<Game[]>('http://public.connectnow.org.uk/applicant-test/', {
-			headers: {
-				'Content-Type': 'application/json;charset=UTF-8',
-				'Access-Control-Allow-Origin': '*' // Could work and fix the previous problem, but not in all APIs
-			},
-		})
+    .get<Game[]>('http://public.connectnow.org.uk/applicant-test/')
     .then((res) => res.data)
     .catch((err) => (error.value = err.message))
     .finally(() => (loading.value = false))
