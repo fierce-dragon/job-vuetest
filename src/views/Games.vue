@@ -28,7 +28,19 @@
             :options="orderByOptions"
           >
             <SlotButton>
-              <Arrow />
+              <svg
+								:class="direction == -1 ? 'transform rotate-90 text-app-white w-3' : 'transform -rotate-90 text-app-white w-3'"
+								xmlns="http://www.w3.org/2000/svg"
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								@click="doSort"
+							>
+								<path
+									fill="currentColor"
+									d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z"
+								/>
+							</svg>
             </SlotButton>
           </DefaultSelect>
           <div class="flex">
@@ -81,7 +93,7 @@
 import DefaultInput from '../components/inputs/DefaultInput.vue'
 import DefaultSelect from '../components/inputs/DefaultSelect.vue'
 import SlotButton from '../components/buttons/SlotButton.vue'
-import Arrow from '../components/graphics/Arrow.vue'
+// import Arrow from '../components/graphics/Arrow.vue'
 import { ref, onMounted, watch, nextTick } from 'vue'
 import axios from 'axios'
 
@@ -117,6 +129,7 @@ const orderByOptions = [
 const name = ref('')
 const minScore = ref('')
 const orderBy = ref('date')
+const direction = ref(-1)
 
 const filterEntries = async () => {
   await nextTick()
@@ -135,16 +148,16 @@ const filterEntries = async () => {
     switch (orderBy.value) {
       case 'date':
         filteredGames = filteredGames.sort((a, b) =>
-          a.first_release_date > b.first_release_date ? -1 : 1
+          a.first_release_date > b.first_release_date ? direction.value : -direction.value
         )
         break
       case 'score':
         filteredGames = filteredGames.sort((a, b) =>
-          Math.floor(a.rating / 10) > Math.floor(b.rating / 10) ? -1 : 1
+          Math.floor(a.rating / 10) > Math.floor(b.rating / 10) ? direction.value : -direction.value
         )
         break
       case 'name':
-        filteredGames = filteredGames.sort((a, b) => (a.name > b.name ? 1 : -1))
+        filteredGames = filteredGames.sort((a, b) => (a.name > b.name ? direction.value : -direction.value))
         break
     }
   }
@@ -155,8 +168,19 @@ const clearFilter = () => {
   name.value = ''
   minScore.value = ''
   orderBy.value = 'date'
+	direction.value = -1;
   displayGames.value = games.value
   filterEntries()
+}
+
+const doSort = async () => {
+	if(direction.value == -1) {
+		direction.value = 1
+  }
+	else {
+    direction.value = -1
+  }
+	filterEntries()
 }
 
 const getDate = (n: number) => {
